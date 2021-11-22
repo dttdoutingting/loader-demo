@@ -37,7 +37,12 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const webpackDevClientEntry = require.resolve('react-dev-utils/webpackHotDevClient')
 const reactRefreshOverlayEntry = require.resolve('react-dev-utils/refreshOverlayInterop')
 
+// 统计 引入静态组件的个数
 const vincePlugin = require.resolve('./plugin/total.js')
+
+// 统计 mod.import 异步引入组件的个数
+
+const modTotalPlugin = require.resolve('./plugin/mod-total.js')
 
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
@@ -401,12 +406,8 @@ module.exports = function (webpackEnv) {
                       },
                     },
                   ],
-                  isEnvProduction && [
-                    vincePlugin,
-                    {
-                      libraryName: 'antd',
-                    },
-                  ],
+                  isEnvProduction && [vincePlugin, { libraryName: ['antd', 'react'] }],
+                  // isEnvProduction && [modTotalPlugin, { libraryName: 'pay-components' }],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel'),
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).

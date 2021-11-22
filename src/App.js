@@ -6,7 +6,6 @@ function App() {
   return (
     <div className="App">
       <Button type="primary">Button</Button>
-      cddd
       <Test />
     </div>
   )
