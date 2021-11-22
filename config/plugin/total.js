@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 const total = {
-  pathTotal: 0,
   components: {},
+  pathTotal: 0,
   paths: [],
 }
 let cache = -1

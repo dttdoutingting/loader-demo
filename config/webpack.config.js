@@ -401,7 +401,7 @@ module.exports = function (webpackEnv) {
                       },
                     },
                   ],
-                  [
+                  isEnvProduction && [
                     vincePlugin,
                     {
                       libraryName: 'antd',
