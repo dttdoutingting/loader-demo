@@ -2,9 +2,10 @@ const chalk = require('chalk')
 const total = {
   libraryName: '',
   pathTotal: 0,
-  components: {},
-  paths: [],
 }
+
+const components = {}
+
 let cache = -1
 let task = setInterval(() => {
   console.log(chalk.green('~~~~统计中～～～～'))
@@ -12,7 +13,7 @@ let task = setInterval(() => {
     cache = total.pathTotal
   } else {
     clearInterval(task)
-    console.log(total)
+    console.log(components)
   }
 }, 1000)
 // const sortable = (obj) => Object.fromEntries(Object.entries(obj).sort(([, a], [, b]) => b - a))
@@ -25,18 +26,28 @@ module.exports = function (babel) {
         const {
           opts: { libraryName = 'pay-components' },
         } = source
-        total.libraryName = libraryName
+        const _libraryName = Array.isArray(libraryName) ? libraryName : [libraryName]
         const {
           callee: { object = {}, property = {} },
         } = path.node
         const _arguments = Array.from(path.node.arguments)
         if (object.name === 'mod' && property.name === 'import') {
-          const libIdx = _arguments.findIndex((item) => item.value === libraryName)
-          if (libIdx >= 0 && _arguments[libIdx].start === undefined) {
-            if (!total.paths.includes(source.filename)) {
-              total.paths.push(source.filename)
+          for (const item of _arguments) {
+            if (_libraryName.includes(item.value) && item.start === undefined) {
+              total.pathTotal = total.pathTotal + 1
+
+              if (components[item.value]) {
+                components[item.value].total++
+                if (!components[item.value].paths.includes(source.filename)) {
+                  components[item.value].paths.push(source.filename)
+                }
+              } else {
+                components[item.value] = {
+                  paths: [source.filename],
+                  total: 1,
+                }
+              }
             }
-            total.pathTotal++
           }
         }
       },

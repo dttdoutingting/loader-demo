@@ -5,8 +5,6 @@ const mod = {
   import: () => {},
 }
 
-mod.import('pay-components')
-
 const ChargeInfo = React.lazy(async () => {
   const { ChargeInfo: Test } = await mod.import('pay-components')
 })
@@ -15,9 +13,9 @@ const ChargeInfoComp = React.lazy(async () => ({
   default: (await mod.import('pay-components')).ChargeInfo,
 }))
 
-// mod.import('pay-components').then(({ Purchase }) => {
-//   this.setState({ Purchase })
-// })
+mod.import('pay-components').then(({ Purchase }) => {
+  this.setState({ Purchase })
+})
 
 const Test = () => {
   return (

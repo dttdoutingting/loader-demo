@@ -407,7 +407,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                   isEnvProduction && [vincePlugin, { libraryName: 'antd' }],
-                  // isEnvProduction && [modTotalPlugin, { libraryName: 'pay-components' }],
+                  isEnvProduction && [modTotalPlugin, { libraryName: 'pay-components' }],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel'),
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
