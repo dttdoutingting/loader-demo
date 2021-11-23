@@ -406,7 +406,7 @@ module.exports = function (webpackEnv) {
                       },
                     },
                   ],
-                  isEnvProduction && [vincePlugin, { libraryName: ['antd', 'react'] }],
+                  isEnvProduction && [vincePlugin, { libraryName: 'antd' }],
                   // isEnvProduction && [modTotalPlugin, { libraryName: 'pay-components' }],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel'),
                 ].filter(Boolean),

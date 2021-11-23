@@ -16,17 +16,19 @@ let task = setInterval(() => {
     console.log(components)
   }
 }, 1000)
-const sortable = (obj) => Object.fromEntries(Object.entries(obj).sort(([, a], [, b]) => b - a))
+// const sortable = (obj) => Object.fromEntries(Object.entries(obj).sort(([, a], [, b]) => b - a))
+// libraryName 支持传 字符串 或者 数组
 module.exports = function (babel) {
   //   var t = babel.types
   return {
     visitor: {
       ImportDeclaration(path, source) {
         const {
-          opts: { libraryName = ['antd'] },
+          opts: { libraryName = 'antd' },
         } = source
-        const libName = libraryName.find((item) => item === path.node.source.value)
-        console.log(libName, 'lib=====')
+        const _libraryName = Array.isArray(libraryName) ? libraryName : [libraryName]
+        const libName = _libraryName.find((item) => item === path.node.source.value)
+
         if (libName) {
           const { specifiers = [] } = path.node
           total.pathTotal = total.pathTotal + 1
@@ -34,7 +36,6 @@ module.exports = function (babel) {
           for (let s of specifiers) {
             if (s.imported) {
               const { name } = s.imported
-
               if (components[libName]) {
                 components[libName][name] = components[libName][name] ? components[libName][name] + 1 : 1
 
