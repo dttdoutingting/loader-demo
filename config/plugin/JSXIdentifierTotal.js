@@ -7,6 +7,7 @@ const total = {
 let components = {
   lowerCaseTotal: 0,
   upperCaseTotal: 0,
+  lowerCasePaths: [],
 }
 
 let cache = -1
@@ -17,22 +18,23 @@ function isLowerCasePrefix(str) {
   }
   return false
 }
-
+const sortable = (obj) => Object.fromEntries(Object.entries(obj).sort(([a], [b]) => a.charCodeAt() - b.charCodeAt()))
 let task = setInterval(() => {
-  console.log(chalk.green('~~~~JSX标签使用个数统计中～～～～'))
-
   if (total.pathTotal !== cache) {
     cache = total.pathTotal
   } else {
     clearInterval(task)
-    console.log(components)
+    console.log(chalk.green('~~~~JSX标签使用个数统计结果～～～～'))
+    const { lowerCaseTotal, upperCaseTotal, lowerCasePaths, ...restComps } = components
+    console.log({ lowerCaseTotal, upperCaseTotal, lowerCasePaths, ...sortable(restComps) })
   }
 }, 1000)
+
 module.exports = function (babel) {
   return {
     visitor: {
       JSXElement: {
-        exit(path, file) {
+        exit(path, source) {
           const { openingElement } = path.node
 
           if (openingElement) {
@@ -41,9 +43,13 @@ module.exports = function (babel) {
               if (tmp) {
                 if (isLowerCasePrefix(tmp)) {
                   components.lowerCaseTotal++
+                  if (!components.lowerCasePaths.includes(source.filename)) {
+                    components.lowerCasePaths.push(source.filename)
+                  }
                 } else {
                   components.upperCaseTotal++
                 }
+
                 components[tmp] = components[tmp] ? components[tmp] + 1 : 1
               }
             }

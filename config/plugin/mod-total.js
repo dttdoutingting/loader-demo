@@ -8,11 +8,11 @@ const components = {}
 
 let cache = -1
 let task = setInterval(() => {
-  console.log(chalk.green('~~~~统计中～～～～'))
   if (total.pathTotal !== cache) {
     cache = total.pathTotal
   } else {
     clearInterval(task)
+    console.log(chalk.green('~~~~ mod 动态引用组件 统计结果～～～～'))
     console.log(components)
   }
 }, 1000)
@@ -43,8 +43,8 @@ module.exports = function (babel) {
                 }
               } else {
                 components[item.value] = {
-                  paths: [source.filename],
                   total: 1,
+                  paths: [source.filename],
                 }
               }
             }

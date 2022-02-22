@@ -8,11 +8,11 @@ const components = {}
 
 let cache = -1
 let task = setInterval(() => {
-  console.log(chalk.green('~~~~统计中～～～～'))
   if (total.pathTotal !== cache) {
     cache = total.pathTotal
   } else {
     clearInterval(task)
+    console.log(chalk.green('~~~~静态引用组件统计结果～～～～'))
     console.log(components)
   }
 }, 1000)
@@ -38,12 +38,13 @@ module.exports = function (babel) {
               const { name } = s.imported
               if (components[libName]) {
                 components[libName][name] = components[libName][name] ? components[libName][name] + 1 : 1
-
+                components[libName].total++
                 if (!components[libName].paths.includes(source.filename)) {
                   components[libName].paths.push(source.filename)
                 }
               } else {
                 components[libName] = {
+                  total: 1,
                   paths: [source.filename],
                   [name]: 1,
                 }
