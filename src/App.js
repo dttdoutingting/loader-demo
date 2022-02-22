@@ -20,10 +20,24 @@ mod.import('pay-components').then(({ Purchase }) => {
 })
 
 function App() {
+  function renderTest() {
+    return (
+      <div>
+        <h2>标题</h2>
+        <p>hello world!</p>
+      </div>
+    )
+  }
   return (
     <div className="App">
+      {renderTest()}
       <Button type="primary">Button</Button>
       <Test />
+      <span>test</span>
+      <span>test</span>
+      <span>test</span>
+      <span>test</span>
+      <span>test</span>
     </div>
   )
 }
